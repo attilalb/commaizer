@@ -1,34 +1,36 @@
-import { SetStateAction, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+
+type FileEvent = ChangeEvent<HTMLInputElement>;
 
 const CsvConverter = () => {
-  const [file, setFile] = useState(null);
-  const [convertedFile, setConvertedFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
 
-  const handleFileChange = (event: {
-    target: { files: SetStateAction<null>[] };
-  }) => {
-    setFile(event.target.files[0]);
+  const handleFileChange = (event: FileEvent) => {
+    setFile(event.target.files![0]);
   };
 
   const handleConvertClick = () => {
     const reader = new FileReader();
     reader.onload = function (event) {
-      const content = event.target.result;
+      const content = event.target!.result as string;
       const replacedContent = content.replace(/;/g, ',');
       const blob = new Blob([replacedContent], { type: 'text/csv' });
       setConvertedFile(blob);
     };
-    reader.readAsText(file);
+    reader.readAsText(file!);
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       <div className="bg-white p-10 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-4">CSV Converter</h1>
-        <p className="text-lg mb-4">Replace semicolons with commas in .csv files.</p>
+        <p className="text-lg mb-4">
+          Replace semicolons with commas in .csv files.
+        </p>
         <div className="mb-4">
           <label htmlFor="file" className="block text-gray-800 font-bold mb-2">
-            Choose a .CSV file to convert 
+            Choose a .CSV file to convert
           </label>
           <input
             type="file"
