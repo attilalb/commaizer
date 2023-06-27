@@ -24,7 +24,7 @@ const CsvConverter = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       <div className="bg-white p-10 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-4">CSV Converter</h1>
+        <h1 className="text-3xl font-bold mb-4 tracking-widest">Commaizer</h1>
         <p className="text-lg mb-4">
           Replace semicolons with commas in .csv files.
         </p>
@@ -58,6 +58,14 @@ const CsvConverter = () => {
           </div>
         )}
       </div>
+      <footer className="mx-auto mt-4">
+        <p className="text-sm">
+          Made with ❤ by{' '}
+          <a href="https://github.com/attilalb/" className="font-bold ">
+            AttilaLB
+          </a>{' '}
+        </p>
+      </footer>
     </div>
   );
 };
