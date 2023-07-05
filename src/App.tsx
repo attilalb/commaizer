@@ -15,10 +15,13 @@ const CsvConverter = () => {
     reader.onload = function (event) {
       const content = event.target!.result as string;
       const replacedContent = content.replace(/;/g, ',');
-      const blob = new Blob([replacedContent], { type: 'text/csv' });
+      const utf8EncodedContent = new TextEncoder().encode(replacedContent);
+      const blob = new Blob([utf8EncodedContent], {
+        type: 'text/csv;charset=utf-8',
+      });
       setConvertedFile(blob);
     };
-    reader.readAsText(file!);
+    reader.readAsText(file!, 'utf-8');
   };
 
   return (
