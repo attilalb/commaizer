@@ -4,24 +4,28 @@ type FileEvent = ChangeEvent<HTMLInputElement>;
 
 const CsvConverter = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [parsedContent, setParsedContent] = useState<string | null>(null);
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
 
   const handleFileChange = (event: FileEvent) => {
-    setFile(event.target.files![0]);
-  };
-
-  const handleConvertClick = () => {
+    const selectedFile = event.target.files![0];
     const reader = new FileReader();
     reader.onload = function (event) {
       const content = event.target!.result as string;
-      const replacedContent = content.replace(/;/g, ',');
-      const utf8EncodedContent = new TextEncoder().encode(replacedContent);
-      const blob = new Blob([utf8EncodedContent], {
-        type: 'text/csv;charset=utf-8',
+      setParsedContent(content);
+      setFile(selectedFile);
+    };
+    reader.readAsText(selectedFile, 'UTF-8');
+  };
+
+  const handleConvertClick = () => {
+    if (file) {
+      const replacedContent = parsedContent!.replace(/;/g, ',');
+      const blob = new Blob([replacedContent], {
+        type: 'text/csv;charset=utf-8;',
       });
       setConvertedFile(blob);
-    };
-    reader.readAsText(file!, 'utf-8');
+    }
   };
 
   return (
@@ -43,6 +47,12 @@ const CsvConverter = () => {
             onChange={handleFileChange}
           />
         </div>
+        {parsedContent && (
+          <div className="mb-4">
+            <h2 className="text-lg font-bold mb-2">Parsed Content:</h2>
+            <pre>{parsedContent}</pre>
+          </div>
+        )}
         <button
           className="w-full rounded-3xl bg-black px-6 py-2 text-xl font-medium uppercase text-white"
           onClick={handleConvertClick}
@@ -55,6 +65,7 @@ const CsvConverter = () => {
             <a
               href={URL.createObjectURL(convertedFile)}
               download="converted.csv"
+              className="text-blue-500 font-bold underline"
             >
               Download Converted File
             </a>
@@ -64,7 +75,7 @@ const CsvConverter = () => {
       <footer className="mx-auto mt-4">
         <p className="text-sm">
           Made with ❤ by{' '}
-          <a href="https://github.com/attilalb/" className="font-bold ">
+          <a href="https://github.com/attilalb/" className="font-bold">
             AttilaLB
           </a>{' '}
         </p>
