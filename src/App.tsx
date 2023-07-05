@@ -48,12 +48,7 @@ const CsvConverter = () => {
             onChange={handleFileChange}
           />
         </div>
-        {parsedContent && (
-          <div className="mb-4">
-            <h2 className="text-lg font-bold mb-2">Parsed Content:</h2>
-            <pre>{parsedContent}</pre>
-          </div>
-        )}
+
         <button
           className="w-full rounded-3xl bg-black px-6 py-2 text-xl font-medium uppercase text-white"
           onClick={handleConvertClick}
