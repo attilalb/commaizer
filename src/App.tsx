@@ -21,8 +21,9 @@ const CsvConverter = () => {
   const handleConvertClick = () => {
     if (file) {
       const replacedContent = parsedContent!.replace(/;/g, ',');
-      const blob = new Blob([replacedContent], {
-        type: 'text/csv;charset=utf-8;',
+      const utf8BOM = '\uFEFF';
+      const blob = new Blob([utf8BOM, replacedContent], {
+        type: 'text/csv;charset=utf-8-sig;',
       });
       setConvertedFile(blob);
     }
